@@ -3,28 +3,50 @@
 
 <head>
   <title>The Gallery of Horns</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link
+    href="https://fonts.googleapis.com/css?family=Abril+Fatface|Acme|Amatic+SC|Dancing+Script|Indie+Flower|Lobster|Modak|Pacifico|Patrick+Hand|Righteous|Yellowtail|ZCOOL+XiaoWei&display=swap"
+    rel="stylesheet">
+
   <link rel="stylesheet" href="css/reset.css" />
-    <link rel="stylesheet" href="css/base.css" />
-    <link rel="stylesheet" href="css/layouts.css" />
-    <link rel="stylesheet" href="css/modules.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layouts.css" />
+  <link rel="stylesheet" href="css/modules.css" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script id="horns-template" type="text/x-handlebars-template">
-      <div class="{{keyword}}">
-        <h2>{{title}}</h2>
-        <img src="{{image_url}}" alt="">
-        <p>{{description}}</p>
-      </div>
-  </script>
+        <div id="{{keyword}}">
+            <h2>{{title}}</h2>
+            <img src="{{image_url}}" alt="">
+            <p>{{description}}</p>
+        </div>
+    </script>
+  <!-- <script id="box-template" type="text/x-handlebars-template">
+        <div id="{{keyword}}">
+            <h2>{{title}}</h2>
+            <img src="{{image_url}}" alt="">
+            <p>{{description}}</p>
+        </div>
+    </script> -->
 </head>
 
-<body>
+<body id="foggy">
   <header>
     <h1>The Gallery of Horns</h1>
-    <select>
-      <option value="default">Filter by Keyword</option>
-    </select>
-    <button id="1">page 1</button>
-    <button id="2">page 2</button>
+    <span class="select">
+      <select class="filter">
+        <option value="default">Filter by Keyword</option>
+      </select>
+      <select class="sort">
+        <option value="default">Sort by</option>
+        <option value="title">Title</option>
+        <option value="number"># of Horns</option>
+      </select>
+    </span>
+    <br>
+    <span class="pages">
+      <button id="1">page1</button>
+      <button id="2">page2</button>
+    </span>
   </header>
   <main>
     <section id="photo-template">

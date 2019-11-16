@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 function Horns(data) {
   this.image_url = data.image_url;
@@ -8,55 +8,114 @@ function Horns(data) {
   this.horns = data.horns;
   Horns.all.push(this);
 }
+
 Horns.all = [];
 
 Horns.prototype.render = function () {
 
-  let templateMarkup = $(`#horns-template`).html();
-  let template = Handlebars.compile(templateMarkup);
+  let templateMrkup = $('#horns-template').html();
+  let template = Handlebars.compile(templateMrkup);
   let hornOutput = template(this);
-  $(`#photo-template`).append(hornOutput);
+  $('#photo-template').append(hornOutput);
+  $('div').hide();
+  $('div').fadeIn(1000);
 };
+
 
 function populateSelectBox() {
   let seen = {};
-  let select = $('select');
-  select.empty();
-  Horns.all.forEach((horn) => {
+  let select = $('.filter');
+  $(select).empty();
+  Horns.all.forEach(horn => {
     if (!seen[horn.keyword]) {
-      let option = `<option value="${horn.keyword}">${horn.keyword}</option>`;
+      let option = `<option value = "${horn.keyword}">${horn.keyword}</option>`;
       select.append(option);
       seen[horn.keyword] = true;
+
+    }
+
+  });
+
+}
+function populateSortBox() {
+  $('.sort').on('change', function () {
+    if ($('.sort').val() == 'title') {
+      sortingByTitle();
+      $('#photo-template').html('');
+      Horns.all.forEach(element => {
+        element.render();
+      });
+    } else if ($('.sort').val() == 'number') {
+      sortByNumOfHorns();
+      $('#photo-template').html('');
+      Horns.all.forEach(element => {
+        element.render();
+      });
     }
   });
 
-  console.log(seen);
 }
 
-$('select').on('change', function () {
+/// modified from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+
+function sortingByTitle() {
+  Horns.all.sort(function (a, b) {
+    var nameA = a.title
+    var nameB = b.title
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+
+    return 0;
+  });
+
+}
+
+function sortByNumOfHorns() {
+  Horns.all.sort(function (a, b) {
+    var numA = a.horns
+    var numB = b.horns
+    if (numA < numB) {
+      return -1;
+    }
+    if (numA > numB) {
+      return 1;
+    }
+
+    return 0;
+  });
+}
+
+
+$('.filter').on('change', function () {
   let selected = $(this).val();
   $('div').hide();
-  $(`.${selected}`).fadeIn(800);
+  $(`#${selected}`).fadeIn(1000);
+
 });
 
-$(`button`).on(`click`, function () {
-  let num = $(this).attr(`id`);
-  readData(num)
-})
+$(`button`).click(function () {
+  let num = $(this).attr('id');
+  showpage(num);
+});
 
-function readData(pageNum) {
-  $('div').remove();
+function showpage(pageNum) {
+  $('#photo-template').html('');
   Horns.all = [];
   $.get(`../data/page-${pageNum}.json`)
     .then(data => {
-      data.forEach((thing) => {
-        let horn = new Horns(thing);
+      data.forEach(thing => {
+        let horn = new Horns(thing)
         horn.render();
       });
     })
-    .then(() => populateSelectBox());
+    .then(() => populateSelectBox())
+    .then(() => populateSortBox())
 }
 
-$(document).ready(function() {
-  readData(1);
-})
+$(document).ready(function () {
+  showpage(1);
+});
