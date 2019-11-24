@@ -1,4 +1,5 @@
 'use strict'
+//// based on the Ibrahim's code that Mr. john make the review on it 
 
 function Horns(data) {
   this.image_url = data.image_url;
